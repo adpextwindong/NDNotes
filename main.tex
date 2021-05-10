@@ -10,66 +10,52 @@
 \begin{document}
 
 \maketitle
+%https://homepages.inf.ed.ac.uk/wadler/papers/propositions-as-types/propositions-as-types.pdf
+%http://math.ucsd.edu/~sbuss/ResearchWeb/bussproofs/BussGuide2_Smith2012.pdf
+% https://tex.stackexchange.com/a/283586
+% https://tex.stackexchange.com/a/278156
 
 \begin{prooftree}
 \AxiomC{A}
 \AxiomC{B}
-\RightLabel{\&\-I}
+\RightLabel{\&-I}
 \BinaryInfC{A\&B}
 \end{prooftree}
 
-Figure 1. Gerhard Gentzen (1935) - Natural Deduction
-
 \begin{prooftree}
-\def\fCenter{\mbox{\ $\Rightarrow$\ }}
-\AxiomC{$\Gamma \Rightarrow \Delta, D$}
-\AxiomC{$D,\Gamma' \Rightarrow \Delta'$}
-\RightLabel{R}
-\BinaryInf$\Gamma , \Gamma' \fCenter \Delta, \Delta'$
+\AxiomC{A}
+\AxiomC{B}
+\RightLabel{$\&$-$E_1$}
+\BinaryInfC{A}
 \end{prooftree}
 
-If an inference is made from one premiss to a conclusion, it looks like this:
-\begin{prooftree}
-\def\fCenter{\mbox{\ $\Rightarrow$\ }}
-\AxiomC{$D,\Gamma' \Rightarrow \Delta'$}
-\RightLabel{R}
-\UnaryInfC{$\Gamma \Rightarrow \Delta, D$}
-\end{prooftree}
-
-If height needs to be kept track of, here's how I did it:
-\begin{prooftree}
-\def\fCenter{\mbox{\ $\Rightarrow$\ }}
-\AxiomC{$\vdash_{n+m}D,\Gamma' \Rightarrow \Delta'$}
-\RightLabel{R}
-\UnaryInfC{$\vdash_{n+m+1}\Gamma \Rightarrow \Delta, D$}
-\end{prooftree}
-
-An example of branching derivation with the heights kept at the left:
 
 \begin{prooftree}
-\def\fCenter{\mbox{\ $\Rightarrow$\ }}
-\newcommand{\and}{\wedge}
-\newcommand{\seq}{\Rightarrow}
-\begin{comment}
-Above is simply defined some custom commands for connectives
-\end{comment}
-
-\AxiomC{$init$}
-\UnaryInfC{$\vdash_{n+m-1}A, B \seq A$}
-\begin{comment}
-This is the leftmost branch
-\end{comment}
-
-\AxiomC{$init$}
-\UnaryInfC{$\vdash_{n+m-1}A, B \seq B$}
-\begin{comment}
-This is the rightmost branch
-\end{comment}
-
-\RightLabel{$R\and$}
-\BinaryInfC{$\vdash_{n+m}A,B \seq A \and B$}
-\RightLabel{$L\and$}
-\UnaryInfC{$\vdash_{n+m+1}A \and B \seq A \and B$}
+\AxiomC{A}
+\AxiomC{B}
+\RightLabel{$\&$-$E_2$}
+\BinaryInfC{B}
 \end{prooftree}
+
+
+
+\begin{prooftree}
+\AxiomC{[$A^x$]}
+\noLine
+\UnaryInfC{$\vdots$}
+\noLine
+\UnaryInfC{B}
+\RightLabel{$\supset$-$I^x$}
+\UnaryInfC{$A \supset B$}
+\end{prooftree}
+
+\begin{prooftree}
+\AxiomC{$A\supset B$}
+\AxiomC{A}
+\RightLabel{$\supset$-$E$}
+\BinaryInfC{B}
+\end{prooftree}
+
+Figure 1. Gerhard Gentzen (1935) - Natural Deduction - Proof Rules
 
 \end{document}
