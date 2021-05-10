@@ -15,46 +15,48 @@
 % https://tex.stackexchange.com/a/283586
 % https://tex.stackexchange.com/a/278156
 
-\begin{prooftree}
-\AxiomC{A}
-\AxiomC{B}
-\RightLabel{\&-I}
-\BinaryInfC{A\&B}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{A}
-\AxiomC{B}
-\RightLabel{$\&$-$E_1$}
-\BinaryInfC{A}
-\end{prooftree}
-
-
-\begin{prooftree}
-\AxiomC{A}
-\AxiomC{B}
-\RightLabel{$\&$-$E_2$}
-\BinaryInfC{B}
-\end{prooftree}
-
-
-
-\begin{prooftree}
-\AxiomC{[$A^x$]}
-\noLine
-\UnaryInfC{$\vdots$}
-\noLine
-\UnaryInfC{B}
-\RightLabel{$\supset$-$I^x$}
-\UnaryInfC{$A \supset B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$A\supset B$}
-\AxiomC{A}
-\RightLabel{$\supset$-$E$}
-\BinaryInfC{B}
-\end{prooftree}
+\begin{center}
+        
+    \begin{tabular}{ ccc}
+        
+        \AxiomC{A}
+        \AxiomC{B}
+        \RightLabel{\&-I}
+        \BinaryInfC{A\&B}
+        \DisplayProof
+        & 
+            \AxiomC{A}
+        \AxiomC{B}
+        \RightLabel{$\&$-$E_1$}
+        \BinaryInfC{A}
+        \DisplayProof
+        & 
+        \AxiomC{A}
+        \AxiomC{B}
+        \RightLabel{$\&$-$E_2$}
+        \BinaryInfC{B}
+        \DisplayProof
+    \end{tabular}
+\end{center}
+\begin{center}
+    \begin{tabular}{ cc}
+    
+    \AxiomC{[$A^x$]}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{B}
+    \RightLabel{$\supset$-$I^x$}
+    \UnaryInfC{$A \supset B$}
+    \DisplayProof
+    &
+    \AxiomC{$A\supset B$}
+    \AxiomC{A}
+    \RightLabel{$\supset$-$E$}
+    \BinaryInfC{B}
+    \DisplayProof
+\end{tabular}
+\end{center}
 
 Figure 1. Gerhard Gentzen (1935) - Natural Deduction - Proof Rules
 
