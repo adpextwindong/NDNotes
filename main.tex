@@ -16,6 +16,8 @@
 % https://tex.stackexchange.com/a/278156
 % https://tex.stackexchange.com/a/214014
 
+\section{Natural Deduction - Proof Rules}
+
 \begin{center}
         
     \begin{tabular}{ ccc}
@@ -43,7 +45,7 @@
     \begin{tabular}{ cc}
     
     \AxiomC{[$A^x$]}
-    \noLine
+        \noLine
     \UnaryInfC{$\vdots$}
     \noLine
     \UnaryInfC{B}
@@ -59,6 +61,28 @@
 \end{tabular}
 \end{center}
 
-Figure 1. Gerhard Gentzen (1935) - Natural Deduction - Proof Rules
+Gerhard Gentzen (1935)
+
+\subsection{Proof of $(B \& A) \supset (A \& B)$}
+
+Assuming $(B \& A)$, we want that it implies $(A \& B)$, using rules $E_1$ ,$E_2$ and $I$  and some clever ordering of the proof tree we can get this. At the end we must discharge the assumptions using $I^x$.
+
+\begin{center}
+    \AxiomC{$[B \& A]^Z$}
+    \RightLabel{$\&$-$E_2$}
+    \UnaryInfC{A}
+    
+    \AxiomC{$[B \& A]^Z$}
+    \RightLabel{$\&$-$E_1$}
+    \UnaryInfC{B}
+    
+    \RightLabel{$\&$-$I$}
+    \BinaryInfC{$A\&B$}
+    
+    \RightLabel{$\supset $-$I^Z$}
+    \UnaryInfC{$(B\&A)\supset (B\&A)$}
+    \DisplayProof
+\end{center}
+
 
 \end{document}
