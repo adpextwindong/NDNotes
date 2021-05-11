@@ -3,7 +3,7 @@
 \usepackage{bussproofs}
 \usepackage{comment}
 
-\title{}
+\title{Natural Deduction}
 \author{}
 \date{}
 
@@ -16,7 +16,7 @@
 % https://tex.stackexchange.com/a/278156
 % https://tex.stackexchange.com/a/214014
 
-\section{Natural Deduction - Proof Rules}
+\section{Proof Rules}
 
 \begin{center}
         
@@ -60,12 +60,9 @@
     \DisplayProof
 \end{tabular}
 \end{center}
-
-Gerhard Gentzen (1935)
-
 \subsection{Proof of $(B \& A) \supset (A \& B)$}
 
-Assuming $(B \& A)$, we want that it implies $(A \& B)$, using rules $E_1$ ,$E_2$ and $I$  and some clever ordering of the proof tree we can get this. At the end we must discharge the assumptions using $I^x$.
+Assuming $(B \& A)$, we want that it implies $(A \& B)$, using rules $E_1$ ,$E_2$ and $I$  and some ordering of the proof tree we can get this. At the end we must discharge the assumptions using $I^x$.
 
 \begin{center}
     \AxiomC{$[B \& A]^Z$}
@@ -84,5 +81,69 @@ Assuming $(B \& A)$, we want that it implies $(A \& B)$, using rules $E_1$ ,$E_2
     \DisplayProof
 \end{center}
 
+\subsection{Rewrite Rules}
+
+\subsubsection{Redex A}
+\begin{center}
+        \AxiomC{$\vdots$}
+        \noLine
+        \UnaryInfC{A}
+        
+        \AxiomC{$\vdots$}
+        \noLine
+        \UnaryInfC{B}
+        
+    \RightLabel{$\&$-$I$}
+    \BinaryInfC{$A\&B$}
+    
+    \RightLabel{$\&$-$E_1$}
+    \UnaryInfC{A}
+    \DisplayProof
+    
+\end{center}
+\begin{center}
+    Can be rewritten as:
+\end{center}
+\begin{center}
+    
+    \AxiomC{$\vdots$}
+    \noLine
+    \UnaryInfC{A}
+    \DisplayProof
+\end{center}
+
+\subsubsection{Redex B}
+
+\begin{center}
+    \AxiomC{$[A]^x$}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$B$}
+    \RightLabel{$\supset$-$I^x$}
+    \UnaryInfC{$A\supset B$}
+    
+    \AxiomC{$\vdots$}
+    \noLine
+    \UnaryInfC{$A$}
+    
+    \RightLabel{$\supset$-$E$}
+    \BinaryInfC{B}
+    
+    \DisplayProof
+\end{center}
+\begin{center}
+    Can be rewritten as:
+\end{center}
+\begin{center}
+    \AxiomC{$\vdots$}
+    \noLine
+    \UnaryInfC{A}
+    \noLine
+    \UnaryInfC{$\vdots$}
+    \noLine
+    \UnaryInfC{$B$}
+    \DisplayProof
+\end{center}
 
 \end{document}
