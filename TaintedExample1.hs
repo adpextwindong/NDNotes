@@ -6,20 +6,25 @@
 {-# LANGUAGE GADTs #-}
 
 import Data.Proxy
+import Data.Typeable
 
 data Taintedness
   = Untainted
   | Tainted
+  deriving Eq
 
 type family CombineTaintedness (a :: Taintedness) (b :: Taintedness) :: Taintedness where
     'Tainted `CombineTaintedness` _ = 'Tainted
     _ `CombineTaintedness` 'Tainted = 'Tainted
     _ `CombineTaintedness` _ = 'Untainted
 
+-- Kind-index GADT
 data Expr (tainted :: Taintedness) a where
   Base :: Proxy tainted -> a -> Expr tainted a
   Uncurse :: Expr 'Tainted a -> Expr 'Untainted b -> Expr 'Untainted b
-  And :: Expr ta a -> Expr tb b -> Expr (ta `CombineTaintedness` tb) (a, b)
+
+--TODO some sort of equals instance
+--https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html
 
 ut = (Proxy @'Untainted)
 tt = (Proxy @'Tainted)

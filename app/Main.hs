@@ -1,6 +1,5 @@
 {-# LANGUAGE GADTs, StandaloneDeriving #-}
-{-# LANGUAGE ConstraintKinds #-}
--- https://kseo.github.io/posts/2017-01-13-constraint-kinds.html
+{-# LANGUAGE ConstraintKinds, DataKinds, TypeFamilies, TypeOperators, TypeApplications #-}
 
 module Main where
 
