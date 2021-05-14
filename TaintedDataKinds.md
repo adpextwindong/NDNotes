@@ -27,9 +27,6 @@ First things I noticed with this mirrored GADT approach:
 
 The whole point of this exercise was to build up a GADT for ND proofs that can track assumptions and discharge them. The Uncurse constructor is supposed to represent an implication.
 
-
-
-
-
-
 The datakind language extension is still over my head. I've seen a [talk on Servant](https://www.youtube.com/watch?v=gMDiKOuwLXw) before but I still need to grok it.
+
+Eisenberg from Tweag.io actually did a [dissertation on dependant types in Haskell](https://www.cis.upenn.edu/~sweirich/papers/eisenberg-thesis.pdf)
