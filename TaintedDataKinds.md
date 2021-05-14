@@ -32,3 +32,4 @@ The datakind language extension is still over my head. I've seen a [talk on Serv
 Eisenberg from Tweag.io actually did a [dissertation on dependant types in Haskell](https://www.cis.upenn.edu/~sweirich/papers/eisenberg-thesis.pdf)
 
 One thing to note is how to handle equality of proof trees (tree structure) and isomorphisms between proofs. The GADT aspect of this might mess it up.
+[Another thing to read](https://stackoverflow.com/59/constraintkinquestions/313171ds-explained-on-a-super-simple-example/31328543#31328543)
