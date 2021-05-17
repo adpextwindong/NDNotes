@@ -30,3 +30,5 @@ The whole point of this exercise was to build up a GADT for ND proofs that can t
 The datakind language extension is still over my head. I've seen a [talk on Servant](https://www.youtube.com/watch?v=gMDiKOuwLXw) before but I still need to grok it.
 
 Eisenberg from Tweag.io actually did a [dissertation on dependant types in Haskell](https://www.cis.upenn.edu/~sweirich/papers/eisenberg-thesis.pdf)
+
+[This approach has helped in making an equ signature.](https://stackoverflow.com/a/55563794) Now we just need a binding.
