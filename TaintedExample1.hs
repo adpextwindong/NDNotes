@@ -1,12 +1,13 @@
 -- you could have a single type instead and use a phantom type along with datakinds to signal the 'taintedness' - Pantsu}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ConstraintKinds #-}
-{-# LANGUAGE FlexibleInstances #-}
 
 import GHC.Generics
 import Data.Proxy
@@ -36,6 +37,7 @@ type TEQShow a = (Typeable a, Eq a, Show a)
 data Expr (tainted :: Taintedness) a where
   Base :: (TEQShow a) => Proxy tainted -> a -> Expr tainted a
   Uncurse :: (TEQShow a, TEQShow b, Typeable t, Typeable u) => Expr t a -> Expr u b -> Expr u b
+  And :: (TEQShow a, TEQShow b) => Expr ta a -> Expr tb b -> Expr (ta `CombineTaintedness` tb) (a,b)
   deriving Typeable
 
 --Compare the type level
@@ -50,9 +52,9 @@ exprCmp (x :: Expr t a) (y:: Expr u b) = (lt == rt) --TODO use a specialized sta
 --Compare at the value level
 exprValueCmp :: forall t a. (Typeable t, Eq a) => Expr t a -> Expr t a -> Bool
 exprValueCmp (Base _ x) (Base _ y) = x == y
-exprValueCmp (Uncurse x y) (Uncurse a b) = exprValueCmp y b
+exprValueCmp (Uncurse l b) (Uncurse r c) = exprValueCmp b c
                                         && case eqT @(Expr t a) @(Expr t a) of
-                                                Just Refl -> exprCmp x a
+                                                Just Refl -> exprCmp l r
                                                 Nothing -> False
 exprValueCmp _ _ = False
 
