@@ -2,65 +2,65 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE ConstraintKinds #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 import GHC.Generics
 import Data.Proxy
 import Data.Typeable
 import Data.Type.Equality
+import Data.Maybe
 
 data Taintedness
   = Untainted
   | Tainted
-  deriving (Eq, Show)
+  deriving (Eq, Show, Typeable)
 
 type family CombineTaintedness (a :: Taintedness) (b :: Taintedness) :: Taintedness where
     'Tainted `CombineTaintedness` _ = 'Tainted
     _ `CombineTaintedness` 'Tainted = 'Tainted
     _ `CombineTaintedness` _ = 'Untainted
 
-type family IsProofMarked' (t :: (Taintedness)) a :: Bool where
+type family IsProofMarked' (t :: Taintedness) a :: Bool where
     IsProofMarked' 'Tainted _ = 'True
-    IsProofMarked' 'Untainted _  = 'True
-    IsProofMarked' _ _ = 'False
+    IsProofMarked' 'Untainted _  = 'False
 
 type IsProofMarked t a = (IsProofMarked' t a ~ 'True)
 
+type TEQShow a = (Typeable a, Eq a, Show a)
+
 -- Kind-index GADT
 data Expr (tainted :: Taintedness) a where
-  Base :: Proxy tainted -> a -> Expr tainted a
-  Uncurse :: (IsProofMarked t a, IsProofMarked u b) => Expr t a -> Expr u b -> Expr u b
+  Base :: (TEQShow a) => Proxy tainted -> a -> Expr tainted a
+  Uncurse :: (TEQShow a, TEQShow b, Typeable t, Typeable u) => Expr t a -> Expr u b -> Expr u b
+  deriving Typeable
 
-equ :: (IsProofMarked t a, IsProofMarked u b, Eq a, Eq b) => Expr t a -> Expr u b -> Bool
-equ l r = undefined
+--Compare the type level
+exprCmp :: (Typeable a, Typeable b, Typeable t, Typeable u, Eq a, Eq b) => Expr t a -> Expr u b -> Bool
+exprCmp (x :: Expr t a) (y:: Expr u b) = (lt == rt) --TODO use a specialized standalone instance for eq or something
+                                     && (case cast y of
+                                            Just ny -> exprValueCmp x ny
+                                            Nothing -> False)
+                                     where lt = typeOf x
+                                           rt = typeOf y
 
-foo :: (Typeable a, Typeable b, Typeable t, Typeable u, Eq a, Eq b) => Expr t a -> Expr u b -> Bool
-foo (x :: Expr t a) (y:: Expr u b) = l == r --TODO use a specialized standalone instance for eq or something
-                                     where l = typeOf x
-                                           r = typeOf y
+--Compare at the value level
+exprValueCmp :: forall t a. (Typeable t, Eq a) => Expr t a -> Expr t a -> Bool
+exprValueCmp (Base _ x) (Base _ y) = x == y
+exprValueCmp (Uncurse x y) (Uncurse a b) = exprValueCmp y b
+                                        && case eqT @(Expr t a) @(Expr t a) of
+                                                Just Refl -> exprCmp x a
+                                                Nothing -> False
+exprValueCmp _ _ = False
 
---deriving instance (Eq a, Eq b, IsProofMarked t a, IsProofMarked u b, a ~ b) => Eq (Expr t a)
---
+--Only works for matching types, can't compare untained and tained. Use ExprCmp
+instance (Typeable t, Typeable a, Eq a) => Eq (Expr t a) where
+  (==) = exprCmp
 
-data Testr a where
-    BTest :: a -> Testr a
-    deriving Eq
+deriving instance (Show a) => Show (Expr t a)
 
---equ :: (Eq a, Eq b) => forall a b. Expr 'Tainted a -> Expr 'Tainted b -> Bool
---equ = False
-
---TODO some sort of equals instance
---https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-Type-Equality.html
-
-ut = (Proxy @'Untainted)
-tt = (Proxy @'Tainted)
--- :t Base (Proxy @'Untainted) 1 `And` Base (Proxy @'Untainted) 2
---    Base (Proxy @'Untainted) 1 `And` Base (Proxy @'Untainted) 2  :: (Num a, Num b) => Expr 'Untainted (a, b)
-
--- :t Base (Proxy @'Tainted) 1 `And` Base (Proxy @'Untainted) 2
---    Base (Proxy @'Tainted) 1 `And` Base (Proxy @'Untainted) 2  :: (Num a, Num b) => Expr 'Tainted (a, b)
+ut = Proxy @'Untainted
+tt = Proxy @'Tainted
