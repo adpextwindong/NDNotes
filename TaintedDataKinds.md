@@ -35,3 +35,6 @@ Eisenberg from Tweag.io actually did a [dissertation on dependant types in Haske
 
 One thing to note is how to handle equality of proof trees (tree structure) and isomorphisms between proofs. The GADT aspect of this might mess it up.
 [Another thing to read](https://stackoverflow.com/59/constraintkinquestions/313171ds-explained-on-a-super-simple-example/31328543#31328543)
+
+http://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting62/gibbons-indexed.pdf
+https://hackage.haskell.org/package/base-4.15.0.0/docs/Data-Typeable.html

@@ -12,17 +12,17 @@
 import GHC.Generics
 import Data.Proxy
 import Data.Typeable
+import Data.Type.Equality
 
 data Taintedness
   = Untainted
   | Tainted
-  deriving Eq
+  deriving (Eq, Show)
 
 type family CombineTaintedness (a :: Taintedness) (b :: Taintedness) :: Taintedness where
     'Tainted `CombineTaintedness` _ = 'Tainted
     _ `CombineTaintedness` 'Tainted = 'Tainted
     _ `CombineTaintedness` _ = 'Untainted
-
 
 type family IsProofMarked' (t :: (Taintedness)) a :: Bool where
     IsProofMarked' 'Tainted _ = 'True
@@ -36,9 +36,13 @@ data Expr (tainted :: Taintedness) a where
   Base :: Proxy tainted -> a -> Expr tainted a
   Uncurse :: (IsProofMarked t a, IsProofMarked u b) => Expr t a -> Expr u b -> Expr u b
 
+equ :: (IsProofMarked t a, IsProofMarked u b, Eq a, Eq b) => Expr t a -> Expr u b -> Bool
+equ l r = undefined
 
-equ :: (IsProofMarked t a, IsProofMarked u b, a ~ b) => Expr t a -> Expr u b -> Bool
-equ = undefined
+foo :: (Typeable a, Typeable b, Typeable t, Typeable u, Eq a, Eq b) => Expr t a -> Expr u b -> Bool
+foo (x :: Expr t a) (y:: Expr u b) = l == r --TODO use a specialized standalone instance for eq or something
+                                     where l = typeOf x
+                                           r = typeOf y
 
 --deriving instance (Eq a, Eq b, IsProofMarked t a, IsProofMarked u b, a ~ b) => Eq (Expr t a)
 --
