@@ -38,3 +38,5 @@ One thing to note is how to handle equality of proof trees (tree structure) and 
 
 http://www.cs.ox.ac.uk/jeremy.gibbons/wg21/meeting62/gibbons-indexed.pdf
 https://hackage.haskell.org/package/base-4.15.0.0/docs/Data-Typeable.html
+
+This might help https://github.com/eddywestbrook/hobbits
